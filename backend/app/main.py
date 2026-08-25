@@ -6,14 +6,14 @@ from app.database.session import engine
 from app.database.base import Base
 # Import models to register
 from app.models import *  # noqa
-from app.api.public.tables import router as public_tables_router
-from app.api.public.orders import router as public_orders_router
-from app.api.admin.tables import router as admin_tables_router
-from app.api.admin.categories import router as admin_categories_router
-from app.api.admin.products import router as admin_products_router
-from app.api.admin.orders import router as admin_orders_router
-from app.api.admin.sales import router as admin_sales_router
-from app.api.admin.dashboard import router as admin_dashboard_router
+from app.routers.public.tables import router as public_tables_router
+from app.routers.public.orders import router as public_orders_router
+from app.routers.admin.tables import router as admin_tables_router
+from app.routers.admin.categories import router as admin_categories_router
+from app.routers.admin.products import router as admin_products_router
+from app.routers.admin.orders import router as admin_orders_router
+from app.routers.admin.sales import router as admin_sales_router
+from app.routers.admin.dashboard import router as admin_dashboard_router
 import os
 
 # Crear tablas si no existen (para sqlite dev). En prod usar alembic.
