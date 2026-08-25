@@ -17,7 +17,10 @@ from app.api.admin.dashboard import router as admin_dashboard_router
 import os
 
 # Crear tablas si no existen (para sqlite dev). En prod usar alembic.
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Warning: create_all failed (DB may not be ready): {e}")
 
 app = FastAPI(
     title="Cafetería QR API",
@@ -34,11 +37,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Static for uploads
-upload_dir = os.path.join(os.path.dirname(__file__), "..", "uploads")
-os.makedirs(upload_dir, exist_ok=True)
-if os.path.exists(upload_dir):
-    app.mount("/static", StaticFiles(directory=upload_dir), name="static")
+# Static for uploads (Vercel filesystem is read-only, use /tmp)
+try:
+    upload_dir = os.path.join(os.path.dirname(__file__), "..", "uploads")
+    # En Vercel solo /tmp es escribible
+    if os.environ.get("VERCEL"):
+        upload_dir = "/tmp/uploads"
+    os.makedirs(upload_dir, exist_ok=True)
+    if os.path.exists(upload_dir):
+        app.mount("/static", StaticFiles(directory=upload_dir), name="static")
+except Exception as e:
+    print(f"Warning: static mount failed: {e}")
 
 # Routers
 API_PREFIX = "/api"
