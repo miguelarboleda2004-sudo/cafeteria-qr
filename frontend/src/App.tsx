@@ -4,7 +4,6 @@ import MenuPage from './pages/MenuPage'
 import CartPage from './pages/CartPage'
 import CheckoutPage from './pages/CheckoutPage'
 import ReceiptPage from './pages/ReceiptPage'
-import AdminLoginPage from './pages/admin/AdminLoginPage'
 import AdminLayout from './layouts/AdminLayout'
 import DashboardPage from './pages/admin/DashboardPage'
 import TablesPage from './pages/admin/TablesPage'
@@ -24,7 +23,7 @@ function App() {
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/order/:publicCode" element={<ReceiptPage />} />
 
-      <Route path="/admin/login" element={<AdminLoginPage />} />
+      <Route path="/admin/login" element={<Navigate to="/admin" replace />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<DashboardPage />} />
         <Route path="tables" element={<TablesPage />} />
