@@ -15,3 +15,4 @@ supabase
 pytest
 pytest-asyncio
 email-validator
+psycopg2-binary
