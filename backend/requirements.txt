@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+SQLAlchemy
+alembic
+python-multipart
+python-jose[cryptography]
+passlib[bcrypt]
+qrcode[pil]
+Pillow
+httpx
+supabase
+pytest
+pytest-asyncio
+email-validator
