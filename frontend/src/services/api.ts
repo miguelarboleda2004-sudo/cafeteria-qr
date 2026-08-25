@@ -6,16 +6,19 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  // Supabase token
+  // Asegurar entrada directa: si no hay credencial, fija ADMIN
+  if (!localStorage.getItem('sb-access-token') && !localStorage.getItem('access_token') && !localStorage.getItem('dev-role')) {
+    localStorage.setItem('dev-role', 'ADMIN')
+    localStorage.setItem('user-email', 'admin@cafeteria.local')
+  }
   const token = localStorage.getItem('sb-access-token') || localStorage.getItem('access_token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
-  } else {
-    // Dev header fallback
-    const devRole = localStorage.getItem('dev-role')
-    if (devRole) {
-      config.headers['X-Dev-Role'] = devRole
-    }
+  }
+  // Siempre enviar X-Dev-Role como fallback para backend (no molesta si hay JWT válido)
+  const devRole = localStorage.getItem('dev-role')
+  if (devRole) {
+    config.headers['X-Dev-Role'] = devRole
   }
   return config
 })

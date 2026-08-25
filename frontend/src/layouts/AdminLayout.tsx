@@ -9,14 +9,13 @@ export default function AdminLayout() {
   const [userEmail, setUserEmail] = useState<string | null>(null)
 
   useEffect(() => {
-    const token = localStorage.getItem('sb-access-token') || localStorage.getItem('dev-role')
-    if (!token) {
-      navigate('/admin/login')
-    } else {
-      const email = localStorage.getItem('user-email') || 'Admin'
-      setUserEmail(email)
+    // Entrada directa sin login: asegura dev-role ADMIN y no redirige
+    if (!localStorage.getItem('sb-access-token') && !localStorage.getItem('dev-role')) {
+      localStorage.setItem('dev-role', 'ADMIN')
+      localStorage.setItem('user-email', 'admin@cafeteria.local')
     }
-    // Check supabase session
+    const email = localStorage.getItem('user-email') || 'Admin (sin login)'
+    setUserEmail(email)
     if (supabase) {
       supabase.auth.getSession().then(({ data }) => {
         if (data.session?.user?.email) setUserEmail(data.session.user.email)
@@ -27,8 +26,9 @@ export default function AdminLayout() {
   const logout = async () => {
     if (supabase) await supabase.auth.signOut()
     localStorage.removeItem('sb-access-token')
-    localStorage.removeItem('dev-role')
-    navigate('/admin/login')
+    // Mantener dev-role para entrada directa, solo limpiar token
+    // localStorage.removeItem('dev-role')
+    navigate('/admin')
   }
 
   const links = [
